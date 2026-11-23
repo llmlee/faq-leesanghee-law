@@ -1,0 +1,4 @@
+# 공개 저장소 — 상담·사건 데이터는 절대 커밋하지 않는다
+data/
+*.html.bak
+node_modules/
