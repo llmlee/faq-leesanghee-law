@@ -12,8 +12,11 @@ for (const c of cards) {
   (seenTitle[t] = seenTitle[t] || []).push(c.id);
   if (c.tier !== "검증됨" && c.tier !== "y") R.unverified++;
   if (c.id.startsWith("O-")) {
-    if (!c.diagram) R.opinionNoDiagram.push(c.id);
-    else if (!/6컷|만화/.test(c.diagram)) R.opinionNoComic.push(c.id);
+    const d = c.diagram || "";
+    // 6컷 판정: 6컷 표지가 있는 그림, 또는 패널(.pn)·컷(cut) 6개 이상, 또는 svg 6개 이상
+    const panels = Math.max((d.match(/class="pn"/g) || []).length, (d.match(/class="(?:cut|opn-cut)"/g) || []).length, (d.match(/<svg/g) || []).length - 1);
+    if (!d) R.opinionNoDiagram.push(c.id);
+    else if (!/aria-label="6컷/.test(d) && panels < 6) R.opinionNoComic.push(c.id);
   }
   const text = [c.body, c.refs, (c.tips || []).join(" ")].join(" ").replace(/<[^>]+>/g, " ");
   for (const m of text.matchAll(LAW_RE)) {
