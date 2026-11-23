@@ -26,3 +26,17 @@ function comic(spec) {
     spec.panels.map((p, i) => panel(p, i, spec.names)).join("") + `</svg></figure>`;
 }
 module.exports = { comic };
+
+// 세로 판단 흐름도: steps = [{cls:"info|safe|warn|acc|", t:"제목", s:"설명"}]
+function flow(label, steps) {
+  const W = 760, bh = 62, gap = 26; let y = 10, out = "";
+  steps.forEach((st, i) => {
+    out += `<rect class="bx${st.cls ? " " + st.cls : ""}" x="60" y="${y}" width="${W - 120}" height="${bh}" rx="8"/>` +
+      `<text class="tx b" x="${W / 2}" y="${y + 26}" text-anchor="middle">${esc(st.t)}</text>` +
+      `<text class="tx s" x="${W / 2}" y="${y + 47}" text-anchor="middle">${esc(st.s || "")}</text>`;
+    if (i < steps.length - 1) out += `<path class="ar" d="M${W / 2},${y + bh} V${y + bh + gap - 4}"/><polygon class="ahp" points="${W / 2 - 5},${y + bh + gap - 8} ${W / 2 + 5},${y + bh + gap - 8} ${W / 2},${y + bh + gap - 1}"/>`;
+    y += bh + gap;
+  });
+  return `<div class="tx b" style="font-weight:700;margin:4px 0 6px">판단 흐름도</div><figure class="dgfig"><svg class="dg" style="width:100%;height:auto" viewBox="0 0 ${W} ${y}" role="img" aria-label="${esc(label)}">${out}</svg></figure>`;
+}
+module.exports.flow = flow;
