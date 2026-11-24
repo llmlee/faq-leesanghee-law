@@ -13,7 +13,7 @@
 - 대상: 「법률협회지 노하우 대시보드」 https://claude.ai/artifact/BJRE7CdJZCga3DMiZ1FJvf
 - 구조(2026-11-24 경량화, v103~): `index.html`(화면·코드 73KB) + `cards.json`(카드) + `status.json`(개정 감시·운영 현황) + `vendor/pdf.mjs`·`vendor/pdf.worker.b64.txt`(PDF 변환기, 첨부 시에만 로드)
 - 카드 추가: Artifact read `path: "cards.json"` → `node tools/add-cards.js cards.json cards.json <새카드.js> <기준id>` → `node tools/audit.js cards.json` → `cards.json`만 `files`로 게시(페이지 재게시 불필요)
-- 개정 감시 갱신: `status.json`만 게시(예약 작업). cat: 상담노하우/상담사례/사건전략/실무노하우/최신법규/최신판례
+- 개정 감시 갱신: `status.json`만 바꿔 게시(예약 작업). 게시 호출에는 `file_path`(변경 없는 index.html)를 함께 넣어야 한다 — files·root만으로는 거절됨. cat: 상담노하우/상담사례/사건전략/실무노하우/최신법규/최신판례
 - 상담 의견서 카드(id `O-YYYYMMDD-NN`)는 반드시 `diagram`에 **도식 + 만화 6컷(3줄×2컷)** 포함.
 - 게시 전 `node tools/audit.js cards.json` 으로 무결성 점검 (ID 중복, 6컷 누락). 옛 단일 HTML은 `extract-cards.js`로 추출 후 점검.
 - 게시 파일에 제어문자(ESC 등)가 있으면 거절된다. 이진 데이터는 base64 텍스트로 둔다.
